@@ -2,6 +2,7 @@ from gensim.models import LdaModel
 from gensim.corpora import Dictionary
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
+import nltk
 import string
 import os
 import joblib
