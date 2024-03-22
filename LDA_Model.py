@@ -13,7 +13,7 @@ from pathlib import Path
 class LDAModel:
     def __init__(self):
         script_dir = os.path.dirname(__file__)
-        model_path = os.path.join(script_dir, 'models/LDA_Model.pkl')
+        model_path = os.path.join(script_dir, 'fake_news_app_mdfend/models/LDA_Model.pkl')
         dictionary_path = os.path.join(script_dir, 'models/dictionary.pkl')
 
         self.lda_model = joblib.load(model_path)
