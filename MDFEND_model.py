@@ -4,6 +4,7 @@ from faknow.data.process.text_process import TokenizerFromPreTrained
 from faknow.model.content_based.mdfend import MDFEND
 import warnings
 import os
+import gdown
 
 class NewsClassifier:
     def __init__(self):
@@ -12,13 +13,20 @@ class NewsClassifier:
         self.tokenizer = TokenizerFromPreTrained(self.max_len, self.bert)
         self.domain_num = 11
 
-        # Change for gdrive
+        self.MODEL_SAVE_PATH = self.download_model()
+        self.MDFEND_MODEL = self.load_model()
+
+    def download_model(self):
         script_dir = os.path.dirname(__file__)  # the cwd relative path of the script file
         rel_path = 'models/Model_10_experts_20_epoch_best.pth'
         rel_to_cwd_path = os.path.join(script_dir, rel_path)
 
-        self.MODEL_SAVE_PATH = rel_to_cwd_path
-        self.MDFEND_MODEL = self.load_model()
+        if not os.path.exists(rel_to_cwd_path):
+            # Download the model from Google Drive
+            url = '17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m'
+            gdown.download(url, rel_to_cwd_path, quiet=False)
+
+        return rel_to_cwd_path
 
     def load_model(self):
         model = MDFEND(self.bert, self.domain_num)
