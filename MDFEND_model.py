@@ -13,21 +13,21 @@ class NewsClassifier:
         self.tokenizer = TokenizerFromPreTrained(self.max_len, self.bert)
         self.domain_num = 11
 
-        self.MODEL_SAVE_PATH = self.download_model()
+        # Google Drive file ID for the model
+        file_id = 'YOUR_GOOGLE_DRIVE_FILE_ID'
+        model_path = 'models/model_10_experts_20_epoch_best.pth'
+        # https://drive.google.com/file/d/17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m/view?usp=sharing
+        self.MODEL_SAVE_PATH = self.download_from_gdrive(file_id, model_path)
         self.MDFEND_MODEL = self.load_model()
 
-    def download_model(self):
-        script_dir = os.path.dirname(__file__)  # the cwd relative path of the script file
-        rel_path = 'models/model_10_experts_20_epoch_best.pth'
-        rel_to_cwd_path = os.path.join(script_dir, rel_path)
-
-        if not os.path.exists(rel_to_cwd_path):
-            # Download the model from Google Drive
-            # https://drive.google.com/file/d/17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m/view?usp=sharing
-            url = "17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m"
-            gdown.download(id=url, quiet=True)
-
-        return rel_to_cwd_path
+    def download_from_gdrive(self, file_id, output_path):
+        output = os.path.join(os.path.dirname(__file__), output_path)
+        
+        # Check if the file already exists
+        if not os.path.exists(output):
+            gdown.download(id='17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m', output, quiet=False)
+        
+        return output
 
     def load_model(self):
         model = MDFEND(self.bert, self.domain_num)
