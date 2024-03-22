@@ -7,7 +7,6 @@ torchaudio==2.2.1
 torchvision==0.17.1
 transformers==4.39.0
 gdown==4.6.0
-pickle
 
 joblib~=1.2.0
 gensim~=4.3.0
