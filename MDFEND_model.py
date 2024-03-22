@@ -18,7 +18,7 @@ class NewsClassifier:
 
     def download_model(self):
         script_dir = os.path.dirname(__file__)  # the cwd relative path of the script file
-        rel_path = 'models/Model_10_experts_20_epoch_best_copy.pth'
+        rel_path = 'models/model_10_experts_20_epoch_best_copy.pth'
         rel_to_cwd_path = os.path.join(script_dir, rel_path)
 
         if not os.path.exists(rel_to_cwd_path):
