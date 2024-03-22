@@ -9,7 +9,6 @@ def model_init(class_name):
     if class_name == 'lda':
         model = LDAModel()
     elif class_name == 'mdfend':
-        from another_module import AnotherClass  # replace 'another_module' with the actual module where AnotherClass is defined
         model = NewsClassifier()
     else:
         raise ValueError(f"Invalid class name: {class_name}")
