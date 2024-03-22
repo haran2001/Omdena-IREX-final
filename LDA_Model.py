@@ -12,8 +12,8 @@ from nltk.stem import SnowballStemmer
 class LDAModel:
     def __init__(self):
         script_dir = os.path.dirname(__file__)
-        model_path = os.path.join(script_dir, 'models\\LDA_Model.pkl')
-        dictionary_path = os.path.join(script_dir, 'models\\dictionary.pkl')
+        model_path = os.path.join(script_dir, 'models/LDA_Model.pkl')
+        dictionary_path = os.path.join(script_dir, 'models/dictionary.pkl')
 
         self.lda_model = joblib.load(model_path)
         self.dictionary = joblib.load(dictionary_path)
