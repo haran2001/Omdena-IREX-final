@@ -4,7 +4,6 @@ from faknow.data.process.text_process import TokenizerFromPreTrained
 from faknow.model.content_based.mdfend import MDFEND
 import warnings
 import os
-import streamlit as st
 import gdown
 
 class NewsClassifier:
@@ -30,8 +29,6 @@ class NewsClassifier:
         
         return output
 
-    
-    @st.cache_resource
     def load_model(self):
         model = MDFEND(self.bert, self.domain_num)
         model.load_state_dict(torch.load(f=self.MODEL_SAVE_PATH, map_location=torch.device('cpu')))
