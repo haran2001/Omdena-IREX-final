@@ -5,16 +5,22 @@ from LDA_Model import LDAModel
 # Press the green button in the gutter to run the script.
 
 @st.cache_resource
-def model_init():
-    model = NewsClassifier()
+def model_init(class_name):
+    if class_name == 'lda':
+        model = LDAModel()
+    elif class_name == 'mdfend':
+        from another_module import AnotherClass  # replace 'another_module' with the actual module where AnotherClass is defined
+        model = NewsClassifier()
+    else:
+        raise ValueError(f"Invalid class name: {class_name}")
     return model
 
 def main():
     # Text input box
     input_text = st.text_area('Enter text here:')
 
-    lda_model = LDAModel()
-    model = model_init()
+    lda_model = model_init('lda')
+    model = model_init('mdfend')
     # result = model.predict('text', lda_label)
 
     if st.button('Process'):
