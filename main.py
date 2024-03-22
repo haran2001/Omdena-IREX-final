@@ -4,13 +4,17 @@ from LDA_Model import LDAModel
 
 # Press the green button in the gutter to run the script.
 
+@st.cache_resource
+def model_init():
+    model = NewsClassifier()
+    return model
 
 def main():
     # Text input box
     input_text = st.text_area('Enter text here:')
 
     lda_model = LDAModel()
-    model = NewsClassifier()
+    model = model_init()
     # result = model.predict('text', lda_label)
 
     if st.button('Process'):
