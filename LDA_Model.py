@@ -14,7 +14,7 @@ from pathlib import Path
 class LDAModel:
     def __init__(self):
         script_dir = os.path.dirname(__file__)
-        model_path = os.path.join(script_dir, 'models/LDA_Model.pkl')
+        model_path = os.path.join(script_dir, 'models/lda_model.pkl')
         dictionary_path = os.path.join(script_dir, 'models/dictionary.pkl')
 
         self.lda_model = joblib.load(model_path)
