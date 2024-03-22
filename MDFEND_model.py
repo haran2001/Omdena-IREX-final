@@ -4,6 +4,7 @@ from faknow.data.process.text_process import TokenizerFromPreTrained
 from faknow.model.content_based.mdfend import MDFEND
 import warnings
 import os
+import streamlit as st
 import gdown
 
 class NewsClassifier:
