@@ -18,13 +18,13 @@ class NewsClassifier:
 
     def download_model(self):
         script_dir = os.path.dirname(__file__)  # the cwd relative path of the script file
-        rel_path = 'models/Model_10_experts_20_epoch_best.pth'
+        rel_path = 'models/Model_10_experts_20_epoch_best_copy.pth'
         rel_to_cwd_path = os.path.join(script_dir, rel_path)
 
         if not os.path.exists(rel_to_cwd_path):
             # Download the model from Google Drive
-            url = '17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m'
-            gdown.download(url, rel_to_cwd_path, quiet=False)
+            url = "1S4c77GF9PA29QOJyQOceZVb6zyBSbETG"
+            gdown.download(id=url, quiet=True)
 
         return rel_to_cwd_path
 
