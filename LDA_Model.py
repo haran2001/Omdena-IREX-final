@@ -13,6 +13,8 @@ from pathlib import Path
 
 class LDAModel:
     def __init__(self):
+        nltk.download('punkt')
+        nltk.download('stopwords')
         script_dir = os.path.dirname(__file__)
         model_path = os.path.join(script_dir, 'models/lda_model.pkl')
         dictionary_path = os.path.join(script_dir, 'models/dictionary.pkl')
