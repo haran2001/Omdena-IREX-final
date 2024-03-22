@@ -25,7 +25,7 @@ class NewsClassifier:
         
         # Check if the file already exists
         if not os.path.exists(output):
-            gdown.download(id='17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m', output, quiet=False)
+            gdown.download(id='17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m', output=output, quiet=False)
         
         return output
 
