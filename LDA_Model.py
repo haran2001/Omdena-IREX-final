@@ -7,6 +7,7 @@ import os
 import joblib
 import re
 from nltk.stem import SnowballStemmer
+from pathlib import Path
 
 
 class LDAModel:
