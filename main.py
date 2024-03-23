@@ -3,7 +3,7 @@ from MDFEND_model import NewsClassifier
 from LDA_Model import LDAModel
 from langchain_community.llms import OpenAI
 from OpenAI_agents import *
-# It's a wrapper to cashing models
+
 @st.cache_resource
 def model_init(class_name):
     if class_name == 'lda':
@@ -14,16 +14,10 @@ def model_init(class_name):
         raise ValueError(f"Invalid class name: {class_name}")
     return model
 
-### Actions
-def click_button():
-    pass
-
-
 
 def main():
     # Text input box
     input_text = st.text_area('Enter text here:')
-    #news = "It's a fake news here"
     open_ai_key = st.secrets["open_ai_key"]
     serper_ai_key = st.secrets["serper_ai_key"]
     os.environ["OPENAI_API_KEY"] = open_ai_key
@@ -38,8 +32,6 @@ def main():
     search_agent = InfoExtraction(serper_ai_key)
     summary_agent = SummaryAgent(llm)
 
-
-    # result = model.predict('text', lda_label)
 
     if st.button('Process'):
         if input_text:

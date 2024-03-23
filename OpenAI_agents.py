@@ -212,14 +212,7 @@ if __name__ == "__main__":
     output_search = search_agent.extract_info(output_class_dict['subject'], output_class_dict['event'], output_class_dict['topic'], 5, 3)
     output_summary = summary_agent.run_summary_agent(output_search)
 
-    ## Documentation https://serpapi.com/search-api
-    #params = {
-    #    "engine": "google",
-    #    "q": 'event',
-    #    "api_key": serper_ai_key
-    #}
 
-    #search = serpapi.search(params)
     with open("outputs_open_ai.txt", "w") as file:
         file.write(f"output_filter: {output_filter}\n")
         file.write(f"output_class: {output_class}\n")

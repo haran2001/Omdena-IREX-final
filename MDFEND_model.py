@@ -20,6 +20,7 @@ class NewsClassifier:
         self.MODEL_SAVE_PATH = self.download_from_gdrive(file_id, model_path)
         self.MDFEND_MODEL = self.load_model()
 
+    @staticmethod
     def download_from_gdrive(self, file_id, output_path):
         output = os.path.join(os.path.dirname(__file__), output_path)
         
