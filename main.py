@@ -27,7 +27,7 @@ def main():
     st.secrets["open_ai_key"]
     open_ai_key = st.secrets["open_ai_key"]
     serper_ai_key = st.secrets["serper_ai_key"]
-    os.environ["OPENAI_API_KEY"] = open_ai_key
+    #os.environ["OPENAI_API_KEY"] = open_ai_key
 
     lda_model = model_init('lda')
     model = model_init('mdfend')
