@@ -53,7 +53,7 @@ def main():
             output_search = search_agent.extract_info(output_class_dict['subject'], output_class_dict['event'],
                                                       output_class_dict['topic'], 5, 3)
             output_summary = summary_agent.run_summary_agent(output_search)
-            st.write('Processed text:', result_pred_broba)
+            st.write('The news is Fake with probability:', result_pred_broba)
             st.write('output_filter', output_filter)
             st.write('output_class', output_class)
             st.write('output_decision', output_decision)
