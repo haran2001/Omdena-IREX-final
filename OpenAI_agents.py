@@ -79,7 +79,7 @@ class DecisionAgent(FakeDetectionWrapper):
 
             "category": A label indicating whether the news is fake or real,
             "reasoning": A detailed explanation supporting your classification.
-
+            Provide it in Spanish.
             """
         self.prompt_decision_agent = PromptTemplate(template=self.decision_agent,
                                                     input_variables=["news", "context", "probability"])
