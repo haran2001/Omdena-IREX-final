@@ -24,10 +24,9 @@ def main():
     # Text input box
     input_text = st.text_area('Enter text here:')
     #news = "It's a fake news here"
-    st.secrets["open_ai_key"]
     open_ai_key = st.secrets["open_ai_key"]
     serper_ai_key = st.secrets["serper_ai_key"]
-    #os.environ["OPENAI_API_KEY"] = open_ai_key
+    os.environ["OPENAI_API_KEY"] = open_ai_key
 
     lda_model = model_init('lda')
     model = model_init('mdfend')
