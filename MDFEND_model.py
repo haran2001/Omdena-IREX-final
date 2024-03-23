@@ -45,3 +45,4 @@ class NewsClassifier:
             outputs = self.MDFEND_MODEL(inputs['token_id'], inputs['mask'], torch.tensor(domain))
 
         return outputs.item()*100
+

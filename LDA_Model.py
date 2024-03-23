@@ -26,7 +26,8 @@ class LDAModel:
         # self.stop_words = set(stopwords.words('english'))
         # self.stop_words.update(string.punctuation)
 
-    def preprocess_text(self, text):
+    @staticmethod
+    def preprocess_text(text):
         text = re.sub(r'[^a-zA-ZáéíóúüÁÉÍÓÚÜÑñ\s]', '', text)
         # Tokenize text
         tokens = word_tokenize(text)
