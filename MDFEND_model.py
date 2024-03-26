@@ -14,19 +14,19 @@ class NewsClassifier:
         self.domain_num = 11
 
         # Google Drive file ID for the model
-        file_id = 'YOUR_GOOGLE_DRIVE_FILE_ID'
+        file_id = '17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m'
         model_path = 'models/model_10_experts_20_epoch_best.pth'
         # https://drive.google.com/file/d/17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m/view?usp=sharing
         self.MODEL_SAVE_PATH = self.download_from_gdrive(file_id, model_path)
         self.MDFEND_MODEL = self.load_model()
 
     @staticmethod
-    def download_from_gdrive(self, file_id, output_path):
+    def download_from_gdrive(file_id, output_path):
         output = os.path.join(os.path.dirname(__file__), output_path)
         
         # Check if the file already exists
         if not os.path.exists(output):
-            gdown.download(id='17u8fXwxm5JVWqEJwdcxzea2LhVl0KR5m', output=output, quiet=False)
+            gdown.download(id=file_id, output=output, quiet=False)
         
         return output
 

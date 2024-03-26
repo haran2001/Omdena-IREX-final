@@ -1,7 +1,8 @@
-#from serpapi import GoogleSearch
+from serpapi import GoogleSearch
 import os
 #from dotenv import load_dotenv
 import requests
+from token_controler import *
 
 
 
@@ -44,3 +45,9 @@ def info_extraction(subject, api_key, length=100, min_search=20):
     else:
         raise Exception(f"Failed to fetch search results. Status code: {response.status_code}")
 
+
+if __name__ == "__main__":
+    serper_ai_key = "" ""
+    headline = "It's a headline"
+    headline = limit_tokens(headline)
+    context = info_extraction(headline, serper_ai_key)

@@ -138,7 +138,6 @@ class HeadlineAgent:
 class InfoExtraction:
     def __init__(self, api_key=None):
         self.serper_ai_key = api_key
-
         # Define the mapping of topics to their prioritized sources
         self.topic_priority_map = {
             "Politics": {
@@ -210,31 +209,15 @@ class InfoExtraction:
 
 # Example usage:
 if __name__ == "__main__":
-    open_ai_key = " "
-    serper_ai_key = " "
-    news = "It's a Fake news here"
+    open_ai_key = ""
 
-    llm = OpenAI(temperature=0)
-    filter_agent = FilterAgent(llm)
-    class_agent = ClassAgent(llm)
-    decision_agent = DecisionAgent(llm)
-    search_agent = InfoExtraction(serper_ai_key)
-    summary_agent = SummaryAgent(llm)
+    os.environ["OPENAI_API_KEY"] = open_ai_key
 
-    output_filter = filter_agent.run_filter_agent(news)
-    output_class = class_agent.run_class_agent(news)
-    output_decision = decision_agent.run_decision_agent(news=news, context='no_context', probability='0.5')
-    output_class_dict = json.loads(output_class)
-
-    output_search = search_agent.extract_info(output_class_dict['subject'], output_class_dict['event'], output_class_dict['topic'], 5, 3)
-    output_summary = summary_agent.run_summary_agent(output_search)
-
-
-    with open("outputs_open_ai.txt", "w") as file:
-        file.write(f"output_filter: {output_filter}\n")
-        file.write(f"output_class: {output_class}\n")
-        file.write(f"output_decision: {output_decision}\n")
-        file.write(f"output_search: {output_search}\n")
-        file.write(f"output_summary: {output_summary}\n")
-
-    print("Data has been written to outputs.txt")
+    client = OpenAI(temperature=0)
+    class_agent = ClassAgent(client=client)
+    headline = 'Head'
+    class_result = class_agent.run_class_agent(headline=headline)
+    data = json.loads(class_result)
+    subject = data["subject"]
+    event = data["event"]
+    print(data)
