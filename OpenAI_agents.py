@@ -7,115 +7,132 @@ import serpapi
 import os
 
 
-class FakeDetectionWrapper:
+class FilterAgent:
+    def __init__(self, client):
+        self.client = client
+        filter_agent_template = """ You are an agent with the task of counting in how many entries of a context {context},
+                a text extract {headline} can be found identically and literally word by word.
+                You will review each entry and see if the extract {headline} can be found exactly the same within each entry,
+                not just similar semantically but word by word.
+
+                your job is to generate a JSON structure with the number of entries where this happens:
+
+                      (
+                        "times": number of entries where the headline is found exactly and literally word by word,
+                      )
+                """
+        self.__prompt_template = PromptTemplate(template=filter_agent_template, input_variables=["headline", "context"])
+        self.llm_chain = LLMChain(prompt=self.__prompt_template, llm=self.client)
+
+    def run_filter_agent(self, headline, context):
+        try:
+            output = self.llm_chain.run({'headline': headline, 'context': context})
+            return output
+        except Exception as e:
+            print(e)
+            return "Error in filtering layer"
+
+
+class ClassAgent:
     def __init__(self, client):
         self.client = client
 
+        class_agent_template = """ You are an agent with the task of analysing a headline {headline} .
+                you will identify the subject, the event, and the field the news belongs to either Politics, Economics, or Social.
+                you will provide a JSON Structure:
+                  (
+                  "subject": subject of the news,
+                  "event": event described,
+                  "topic": field the news belongs to Politics, Economics, or Social
+                  )
+                """
+        self.prompt_template = PromptTemplate(template=class_agent_template, input_variables=["headline"])
+        self.llm_chain = LLMChain(prompt=self.prompt_template, llm=self.client)
 
-class FilterAgent(FakeDetectionWrapper):
+    def run_class_agent(self, headline):
+        try:
+            output = self.llm_chain.run({'headline': headline})
+            return output
+        except Exception as e:
+            print(e)
+            return "Error in classification layer"
+
+
+class DecisionAgent:
     def __init__(self, client):
-        super().__init__(client)
+        self.client = client
+        decision_agent_template = """you are information verification agent in 2024,
+                You will be presented with a piece of news {news} and information gathered from the internet {filtered_context}.
+                Your task is to evaluate whether the news is real or fake, based solely on:
 
-        self.filter_agent = """ You are an agent that must label the subjectivity of news {news}, if the news is a 
-        personal opinion, impossible to verify (1), ifthe news is an objective statement (0) if the statement is about
-        an event or fact that can potentially be verified with evidence, even if the evidence is not currently 
-        available in the news {news} provided.it expresses a personal opinion or cannot be verified objectively.
+                - How the {news} corresponds to the information retrieved {filtered_context}, considering the reliability of the sources.
+                - Probability of the news {probability} being real.
+                - Alignment of the headline and the news {alignment},Not aligment is a sign of fake news .
+                - Number of times the exact headline is found in other media outlets {times} which could indicate a misinformation campaign.
 
-        present the label  in a JSON structure
-        (
-          "label": label,
-        )
+                Based on these criteria provided in order of importance,
+                produced a reasoned argumentation whether the news is Fake or real.
+                You answer strictly as a single JSON string. Don't include any other verbose texts and don't include the markdown syntax anywhere.
+
+                  (
+                "category": Fake or Real,
+                "reasoning": Your reasoning here.
+                   )  
+                provide your answers in Spanish
+                """
+        self.prompt_template = PromptTemplate(template=decision_agent_template,
+                                              input_variables=["news",
+                                                               "filtered_context",
+                                                               "probability",
+                                                               "alignment",
+                                                               "times"])
+        self.llm_chain = LLMChain(prompt=self.prompt_template, llm=self.client)
+
+    def run_decision_agent(self, news, filtered_context, probability, alignment, times):
+        try:
+            output = self.llm_chain.run(
+                {'news': news, 'filtered_context': filtered_context, 'probability': probability, 'alignment': alignment,
+                 'times': times})
+            return output
+        except Exception as e:
+            print(e)
+            return "Error in decision layer"
+
+
+class HeadlineAgent:
+    def __init__(self, client):
+        self.client = client
+        headline_agent_template = """ You are an agent with the task of identifying the 
+        whether the headline {headline} is aligned with
+        the body of the news {news}.
+        you will generate a Json output:
+
+      (
+        "label": Aligned or not Aligned,
+      )
+
         """
-        self.prompt_filter_agent = PromptTemplate(template=self.filter_agent, input_variables=["news"])
-        self.llm_chain_filter_agent = LLMChain(prompt=self.prompt_filter_agent, llm=self.client)
+        self.prompt_template = PromptTemplate(template=headline_agent_template, input_variables=["headline", "news"])
+        self.llm_chain = LLMChain(prompt=self.prompt_template,
+                                  llm=self.client)  # Assuming LLLMChain was a typo and should be LLMChain
 
-    def run_filter_agent(self, news):
-        try:
-            filter_layer_output = self.llm_chain_filter_agent.run({'news': news})
-            return filter_layer_output
-        except Exception as e:
-            print(e)
-            return "Error filter layer"
-
-
-class ClassAgent(FakeDetectionWrapper):
-    def __init__(self, client):
-        super().__init__(client)
-
-        self.class_agent = """ You are an agent with the task of identifying the elements subject of a news {news} .
-        you will identify the subject, the event and the field the news belongs to Politics, Economics and Social.
-        you will provide a Json Structure :
-          (
-          "subject":  subject of the news,
-          "event": event described,
-          "topic": field the news belongs to (Politics, Economics or Social
-        )
+    def analyze_alignment(self, headline, news):
         """
-        self.prompt_class_agent = PromptTemplate(template=self.class_agent, input_variables=["news"])
-        self.llm_chain_class_agent = LLMChain(prompt=self.prompt_class_agent, llm=self.client)
+        Analyzes the alignment between a given headline and the body of the news.
 
-    def run_class_agent(self, news):
-        try:
-            class_agent_output = self.llm_chain_class_agent.run({'news': news})
-            return class_agent_output
-        except Exception as e:
-            print(e)
-            return "Error class layer"
+        Parameters:
+        - headline (str): The news headline.
+        - news (str): The full text of the news article.
 
-
-class DecisionAgent(FakeDetectionWrapper):
-    def __init__(self, client):
-        super().__init__(client)
-        self.decision_agent = """You will be presented with a piece of news {news} and contextual information 
-            gathered from the internet {context}.
-            Your task is to evaluate whether the {news} is genuine or not, based solely on:
-
-            - Correlation with information from external sources {context},
-            - The likelihood of it being false as determined by an ML algorithm {probability}, if it is higher than 0.6 
-            it is highly likely to be fake.
-
-            Based on these criteria, you must decide if the evidence supports the authenticity of the news. Your 
-            conclusion should include:
-
-            "category": A label indicating whether the news is fake or real,
-            "reasoning": A detailed explanation supporting your classification.
-            Provide it in Spanish.
-            """
-        self.prompt_decision_agent = PromptTemplate(template=self.decision_agent,
-                                                    input_variables=["news", "context", "probability"])
-
-        # Corrected the LLMChain instantiation
-        self.llm_chain_decision_agent = LLMChain(prompt=self.prompt_decision_agent, llm=self.client)
-
-    def run_decision_agent(self, news, context, probability):
-        try:
-            decision_agent_output = self.llm_chain_decision_agent.run(
-                {'news': news, 'context': context, 'probability': probability})
-            return decision_agent_output
-        except Exception as e:
-            print(e)
-            return "Error decision layer"
-
-
-class SummaryAgent(FakeDetectionWrapper):
-    def __init__(self, client):
-        super().__init__(client)
-
-        self.summary_agent = """Make a summary of the input {RAG_input} in 200 words, discard contradicting info and 
-        narrow it down to stable and verifiable data, avoid contradictory information in the text
+        Returns:
+        - A dictionary with the analysis results, including whether the headline is aligned with the news body and any relevant analysis details.
         """
-        self.prompt_summary_agent = PromptTemplate(template=self.summary_agent, input_variables=["RAG_input"],
-                                                   output_key="summary")
-        # Corrected the LLMChain instantiation
-        self.llm_chain_summary_agent = LLMChain(prompt=self.prompt_summary_agent, llm=self.client)
-
-    def run_summary_agent(self, RAG_input):
         try:
-            summary_agent_output = self.llm_chain_summary_agent.run({'RAG_input': RAG_input})
-            return summary_agent_output
+            output = self.llm_chain.run({'headline': headline, 'news': news})
+            return output
         except Exception as e:
             print(e)
-            return "Error summary layer"
+            return {"error": "Error in headline alignment analysis layer"}
 
 
 class InfoExtraction:
