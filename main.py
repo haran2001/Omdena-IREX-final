@@ -51,7 +51,7 @@ def main():
     if st.button('Process'):
         lda_label = lda_model.predict_topic(news)
         result_pred_proba = model.predict(news, lda_label)
-
+        st.write("ML model output", 100*result_pred_proba)
         class_result = class_agent.run_class_agent(headline=headline)
         st.write("Class result:", class_result)  # Modification here
         data = json.loads(class_result)
