@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # --- Copy project files
 COPY ["main.py", "./"]
-# COPY ["models", "./models/"]
+COPY ["models", "./models/"]
 COPY ["constants.py", "./"]
 COPY ["token_controler.py", "./"]
 COPY ["OpenAI_agents.py", "./"]
@@ -27,5 +27,5 @@ COPY ["LDA_Model.py", "./"]
 COPY ["info_extraction.py", "./"]
 
 # --- Start server
-# CMD gunicorn app:app --bind 0.0.0.0:$PORT --timeout=600 --threads=10
-CMD ["python", "main.py"]
+CMD gunicorn main:app --bind 0.0.0.0:$PORT --timeout=600 --threads=10
+# CMD ["python", "main.py"]
