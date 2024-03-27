@@ -33,23 +33,8 @@ app.secret_key = "super secret key"
 CORS(app)
 
 
-os.environ["OPENAI_API_KEY"] = constants.OPENAI_API_KEY
-os.environ["SERPER_API_KEY"] = constants.SERPER_API_KEY
+# def main():
 
-openai_api_key = constants.OPENAI_API_KEY
-serper_ai_key = constants.SERPER_API_KEY
-
-lda_model = model_init("lda")
-model = model_init("mdfend")
-
-client = OpenAI(temperature=0)
-# Initialize agents
-class_agent = ClassAgent(client=client)
-headline_agent = HeadlineAgent(client=client)
-filter_agent = FilterAgent(client=client)
-decision_agent = DecisionAgent(client=client)
-
-search_agent = InfoExtraction(serper_ai_key)
 
 # --- BACKEND API ---
 
@@ -130,6 +115,23 @@ def inference():
 # ########## START FLASK SERVER ##########
 
 if __name__ == "__main__":
+    os.environ["OPENAI_API_KEY"] = constants.OPENAI_API_KEY
+    os.environ["SERPER_API_KEY"] = constants.SERPER_API_KEY
+
+    openai_api_key = constants.OPENAI_API_KEY
+    serper_ai_key = constants.SERPER_API_KEY
+
+    lda_model = model_init("lda")
+    model = model_init("mdfend")
+
+    client = OpenAI(temperature=0)
+    # Initialize agents
+    class_agent = ClassAgent(client=client)
+    headline_agent = HeadlineAgent(client=client)
+    filter_agent = FilterAgent(client=client)
+    decision_agent = DecisionAgent(client=client)
+
+    search_agent = InfoExtraction(serper_ai_key)
 
     current_port = int(os.environ.get("PORT") or 5000)
     app.debug = True

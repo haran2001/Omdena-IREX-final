@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # --- Copy project files
 COPY ["main.py", "./"]
-COPY ["models", "./models/"]
+# COPY ["models", "./models/"]
 COPY ["constants.py", "./"]
 COPY ["token_controler.py", "./"]
 COPY ["OpenAI_agents.py", "./"]
