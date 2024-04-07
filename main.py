@@ -105,7 +105,13 @@ def inference():
             )
 
             # Final decision display
-            return decision_result
+            # return decision_result
+            return {
+                "decision_result": decision_result,
+                "result_pred_proba": result_pred_proba,
+                "times": times,
+                "context": context,
+            }
     else:
         return f"""
     <h1>Inference server</h1>
