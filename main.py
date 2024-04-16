@@ -99,16 +99,23 @@ def inference():
 
             # Display Filter results
 
-            # Decision Making Agent
+            # Display Filter results
+            # Decision Making Agent, return Fake or Real
             decision_result = decision_agent.run_decision_agent(
-                news, context, result_pred_proba, alignment_label, times
+                news, context, (1 - result_pred_proba), alignment_label, times
             )
+
+            #Convert probabilities based on decision result
+            if decision_result == 'Real':
+                final_proba = (1-result_pred_proba)
+            else:
+                final_proba = result_pred_proba
 
             # Final decision display
             # return decision_result
             return {
                 "decision_result": decision_result,
-                "result_pred_proba": result_pred_proba,
+                "result_pred_proba": final_proba,
                 "times": times,
                 "context": context,
             }
